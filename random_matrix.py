@@ -30,7 +30,6 @@ def bernoulli(m, n):
     columns are l2 normalized
     """
     A = np.random.choice( (0,1), (m, n) )
-    A = column_normalize(A)
     return A 
 
 

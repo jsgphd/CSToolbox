@@ -4,7 +4,7 @@ u"""
 """
 import numpy as np
 from random_matrix import bernoulli, gaussian
-from vecgen import sparse
+from sparse_signal import sparse
 
 
 
