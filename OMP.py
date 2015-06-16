@@ -7,13 +7,68 @@ from random_matrix import bernoulli, gaussian
 from sparse import sparse
 
 
+u"""
+    perform OMP
+    [I/O]
+        A: measurement matrix
+        y: measured vector
+        return: recovered vector
+    [flow]
+        A. init values
+        B. iteration
+            B1. find most correlated column
+            B2. append index to the support set
+            B3. calc estimated singal
+            B4. calc residual
+"""
+class OMP:
 
-def OMP(A, y):
+    def __init__(self, A, y):
+        self.A = A 
+        self.y = y
+        self.S = set([]) # support set
+        self.r = y
+        
+    def next(self):
+        "return n-step estimated signal" 
+        return self.iter_omp()
+    
+    def iter_omp(self):    
+
+        # B1
+        p = np.dot( np.conj(self.A.T), self.r ) 
+        j = np.argmax( np.abs(p) )
+
+        # B2
+        self.S.add(j)
+        #print "self.S", self.S
+        
+        # B3
+        As  = self.A[:,list(self.S)]  # pick up columns which have the index in S
+        xs  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
+        x   = np.zeros(n, dtype=np.complex)
+        for s, j in enumerate(sorted(self.S)):
+            x[j] = xs[s]
+            
+        self.r = self.y - np.dot(self.A, x)
+        return x 
+     
+
+    
+def omp(A, y):
     u"""
         perform OMP
+        [I/O]
         A: measurement matrix
-        y: measurement signal
-        return: sparse vector
+        y: measured vector
+        return: recovered vector
+        [flow]
+        A. init values
+        B. iteration
+            B1. find most correlated column
+            B2. append index to the support set
+            B3. calc estimated singal
+            B4. calc residual
     """
 
     m, n    = A.shape
@@ -56,43 +111,27 @@ def OMP(A, y):
 
     
 if __name__ == '__main__':
+ 
+    import matplotlib.pyplot as plt 
+    
 
-    import matplotlib.pyplot as plt
+    m = 7
+    n = 13
+    s = 2
+     
+    A =  bernoulli(m, n)
+    A =  gaussian(m, n)
+    x = sparse(n, s)
+    y = np.dot(A,x)
     
-    m = 50 
-    n = 200
-    s = 4
-
-    #A   = bernoulli(m, n)
-    A   = gaussian(m, n)
-    x   = sparse(n, s)
-    nr  = 0.03  # noise ratio
-    x   = x + nr * np.random.rand(n) # add noise 
-    y   = np.dot(A, x)
-   
-    #print "meas matrix A[%d x %d]:" % (m, n), "\n", A, "\n"
-    #print "sparse signal x:\n", x, "\n"
-    #print "meas signal y:\n", y, "\n"
-    z   = OMP(A,y)
+    print "x ", x
+    #print "A ", A
+     
+    omp = OMP(A, y)
     
-    if z == "Failed":
-        print z
-    else:
-        z = z.real
-        #print "recovered signal z:\n", z
-        ax1 = plt.subplot(211) 
-        ax1.set_xlim(0,n)
-        ax1.set_ylim(-2,2)
-        ax1.axhline(y=0, c='k')
-        ax1.bar(range(n),x, 0)
-        ax1.scatter(range(n), x)
-        ax2 = plt.subplot(212) 
-        ax2.axhline(y=0, c='k')
-        ax2.set_xlim(0,n)
-        ax2.set_ylim(-2,2)
-        ax2.bar(range(n),z, 0)
-        ax2.scatter(range(n), z)
-    
-    plt.show()
-    
-    
+    for i in range(5):
+        
+        z = omp.next()
+        plt.scatter(np.arange(n), x) 
+        plt.bar(np.arange(n), z, 0)
+        plt.show()
