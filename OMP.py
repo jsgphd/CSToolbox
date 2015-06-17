@@ -72,9 +72,7 @@ class OMP:
         self.S.add(j)
         
         # B3
-        As  = np.compress( [i in self.S for i in np.arange(13)], self.A, axis=1) 
-        #As  = np.compress( S, self.A, axis=1) 
-        #As  = self.A[:,list(self.S)]  # pick up columns which have the index in S
+        As  = self.A[:, np.sort(list(self.S))]  # pick up columns which have the index in S
         xs  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
         x   = np.zeros(n, dtype=np.complex)
         for j, s in enumerate(sorted(self.S)):
