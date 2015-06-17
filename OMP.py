@@ -23,22 +23,44 @@ class OMP:
 
     def __init__(self, A, y):
         # Initialize params
-        self.A = A 
-        self.y = y
-        self.S = set([]) # support set
-        self.r = y
+        self.A  = A 
+        self.y  = y
+        self.S  = set([]) # support set
+        self.r  = y
+        self.e  = 0.0
+        self.x  = np.zeros(n, dtype=np.complex)
+        # iterator var
+        self.step = 0 
         # Constants 
-        self.EPS         = 10**-4   # acceptable residual
-        self.ITER_MAX    = 10**3    # max of loops 
-        
-        
+        self.EPS         = 10**-5   # acceptable residual
+        self.ITER_MAX    = 10**1    # max of loops 
+    
+     
+    def __iter__(self):
+        return self
+   
+     
     def next(self):
-        "return n-step estimated signal" 
-        x       = self.iter_omp()
-        self.r  = self.y - np.dot(self.A, x)
-        if self.EPS > np.abs( np.linalg.norm(self.r) / np.linalg.norm(self.y) ):
-            print "estimated"
-        return x
+        
+        # check number of loops
+        if self.step == self.ITER_MAX:
+            print "Reach to MAX Iterations"
+            raise StopIteration
+        
+        # check condition of convergence 
+        self.r  = self.y - np.dot(self.A, self.x)
+        self.e = np.abs( np.linalg.norm(self.r) / np.linalg.norm(self.y) )
+        self.e = np.linalg.norm(self.r)        
+        if self.e < self.EPS:
+            print "Converged"
+            self._printdebug()
+            raise StopIteration
+
+        # return n-step estimated signal 
+        self.step += 1 
+        self.x = self.iter_omp()
+        return self.x
+   
     
     def iter_omp(self):    
 
@@ -58,7 +80,12 @@ class OMP:
             x[s] = xs[j]
         return x 
      
-
+    def _printdebug(self):
+        
+        #print "residual signal: ", self.r
+        print "residual norm e: ", self.e
+        print "steps: %d" % self.step
+   
     
 if __name__ == '__main__':
  
@@ -81,15 +108,10 @@ if __name__ == '__main__':
     
      
     omp = OMP(A, y)
-    for i in range(5):
-        
-        z = omp.next()
-        align = "51" + str(i+1)
-        plt.subplot(align)
+    for z in omp:
         plt.scatter(np.arange(n), x) 
-        #plt.bar(np.arange(n), z,0)
         plt.stem(z)
-
+    
     plt.show()
         
         
