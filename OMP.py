@@ -5,7 +5,8 @@ u"""
 import numpy as np
 
 
-u"""
+class OMP:
+    u"""
     perform OMP
     [I/O]
         A: measurement matrix
@@ -18,8 +19,7 @@ u"""
             B2. append index to the support set
             B3. calc estimated singal
             B4. calc residual
-"""
-class OMP:
+    """
 
     def __init__(self, A, y):
         # Initialize params
@@ -53,7 +53,7 @@ class OMP:
         self.e = np.linalg.norm(self.r)        
         if self.e < self.EPS:
             print "Converged"
-            self._printdebug()
+            self._print_status()
             raise StopIteration
 
         # return n-step estimated signal 
@@ -73,6 +73,7 @@ class OMP:
         
         # B3
         As  = np.compress( [i in self.S for i in np.arange(13)], self.A, axis=1) 
+        #As  = np.compress( S, self.A, axis=1) 
         #As  = self.A[:,list(self.S)]  # pick up columns which have the index in S
         xs  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
         x   = np.zeros(n, dtype=np.complex)
@@ -80,7 +81,7 @@ class OMP:
             x[s] = xs[j]
         return x 
      
-    def _printdebug(self):
+    def _print_status(self):
         
         #print "residual signal: ", self.r
         print "residual norm e: ", self.e
@@ -95,10 +96,9 @@ if __name__ == '__main__':
     from random_matrix import bernoulli, gaussian
     from sparse import sparse
    
-    
-    m = 7
-    n = 13
-    s = 2
+    m  = 10
+    n  = 20
+    s  = 2
      
     A       =  gaussian(m, n)
     x       = np.zeros(n)
@@ -111,7 +111,8 @@ if __name__ == '__main__':
     for z in omp:
         plt.scatter(np.arange(n), x) 
         plt.stem(z)
-    
+        #plt.show()
+        
     plt.show()
         
         
