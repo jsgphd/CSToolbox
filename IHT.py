@@ -1,13 +1,13 @@
 # coding: utf-8
 u"""
-   OMP (Orthogonal Matching Pursuit) 
+   IHT (Iterative Hard Thresholding) 
 """
 import numpy as np
 
 
-class OMP:
+class IHT:
     u"""
-    perform OMP
+    perform IHT 
     [I/O]
         A: measurement matrix
         y: measured vector
@@ -21,11 +21,11 @@ class OMP:
             B4. calc residual
     """
 
-    def __init__(self, A, y):
+    def __init__(self, A, y, k):
         # Initialize params
         self.A  = A 
         self.y  = y
-        self.S  = set([]) # support set
+        self.k  = k
         self.r  = y
         self.e  = 0.0
         self.x  = np.zeros(n, dtype=np.complex)
@@ -58,27 +58,18 @@ class OMP:
 
         # return n-step estimated signal 
         self.step += 1 
-        self.x = self.iter_omp()
+        self.x = self.iter_iht()
         return self.x
    
     
-    def iter_omp(self):    
+    def iter_iht(self):    
 
         # B1
-        p = np.dot( np.conj(self.A.T), self.r ) 
-        j = np.argmax( np.abs(p) )
-
-        # B2
-        self.S.add(j)
-        
-        # B3
-        As  = self.A[:, sorted(self.S)]  # pick up columns which have the index in S
-        xs  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
-        x   = np.zeros(n, dtype=np.complex)
-        for j, s in enumerate(sorted(self.S)):
-            x[s] = xs[j]
+        p = self.x + np.dot( np.conj(self.A.T),  self.y - np.dot(self.A, self.x) )
+        x = hard_thres(p, self.k)
         return x 
-     
+
+ 
     def _print_status(self):
         
         #print "residual signal: ", self.r
@@ -87,9 +78,20 @@ class OMP:
 
 
 
+def hard_thres(x, k):
+    
+    n = len(x) 
+    desc_idxes  = np.argsort(np.abs(x))[::-1]   # sort indexes in descending order
+    S           = desc_idxes[:k] 
+    x_          = np.zeros(n)
+    for s in S:
+        x_[s] = x[s]
+    return x_ 
+
 
  
 if __name__ == '__main__':
+
  
     import matplotlib
     matplotlib.use("TkAgg")
@@ -107,14 +109,13 @@ if __name__ == '__main__':
     x[10]   = np.pi
     y       = np.dot(A,x)
     
-     
-    omp = OMP(A, y)
-    for z in omp:
+    iht = IHT(A, y, s)
+    for z in iht:
         plt.scatter(np.arange(n), x) 
         plt.stem(z)
-        #plt.show()
+        plt.show()
         
     plt.show()
-        
-        
-        
+    
+    
+    
