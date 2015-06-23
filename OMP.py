@@ -3,66 +3,32 @@ u"""
    OMP (Orthogonal Matching Pursuit) 
 """
 import numpy as np
+from greedy_baseclass import Greedy
 
 
-class OMP:
+class OMP(Greedy):
     u"""
     perform OMP
-    [I/O]
-        A: measurement matrix
-        y: measured vector
-        return: recovered vector
-    [flow]
-        A. init values
-        B. iteration
-            B1. find most correlated column
-            B2. append index to the support set
-            B3. calc estimated singal
-            B4. calc residual
+    [args]
+        A: measurement matrix (2d ndarray)
+        y: measured vector (1d ndarray)
+    [return]
+        recovered vector (1d ndarray)
     """
 
+
     def __init__(self, A, y):
-        # Initialize params
-        self.A  = A 
-        self.y  = y
-        self.S  = set([]) # support set
-        self.r  = y
-        self.e  = 0.0
-        self.x  = np.zeros(n, dtype=np.complex)
-        # iterator var
-        self.step = 0 
-        # Constants 
-        self.EPS         = 10**-5   # acceptable residual
-        self.ITER_MAX    = 10**1    # max of loops 
-    
-     
+
+        Greedy.__init__(self, A, y)
+
+
     def __iter__(self):
+
         return self
    
-     
-    def next(self):
-        
-        # check number of loops
-        if self.step == self.ITER_MAX:
-            print "Reach to MAX Iterations"
-            raise StopIteration
-        
-        # check condition of convergence 
-        self.r  = self.y - np.dot(self.A, self.x)
-        self.e = np.abs( np.linalg.norm(self.r) / np.linalg.norm(self.y) )
-        self.e = np.linalg.norm(self.r)        
-        if self.e < self.EPS:
-            print "Converged"
-            self._print_status()
-            raise StopIteration
-
-        # return n-step estimated signal 
-        self.step += 1 
-        self.x = self.iter_omp()
-        return self.x
-   
+  
     
-    def iter_omp(self):    
+    def iterate(self):    
 
         # B1
         p = np.dot( np.conj(self.A.T), self.r ) 
@@ -79,17 +45,11 @@ class OMP:
             x[s] = xs[j]
         return x 
      
-    def _print_status(self):
-        
-        #print "residual signal: ", self.r
-        print "residual norm e: ", self.e
-        print "steps: %d" % self.step
-
-
 
 
  
 if __name__ == '__main__':
+
  
     import matplotlib
     matplotlib.use("TkAgg")
@@ -112,7 +72,7 @@ if __name__ == '__main__':
     for z in omp:
         plt.scatter(np.arange(n), x) 
         plt.stem(z)
-        #plt.show()
+        plt.show()
         
     plt.show()
         
