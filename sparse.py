@@ -5,11 +5,15 @@ import numpy as np
 
 def sparse(n, k):
     u"""
-        [return]  k-sparse vector
-        n:        size of vector
-        k:        number of nonzero entries
+    perform IHT 
+    [args]
+        n: size of vector
+        k: number of nonzero entries
+    [return]
+        k-sparse vector
     """
-    z   = np.zeros(n)
+
+    z = np.zeros(n)
     for i in np.random.choice( np.arange(n), k, replace=None ):   # supports of nonzero entries
         z[i] = np.random.randn()
     return z
@@ -17,23 +21,17 @@ def sparse(n, k):
 
 
 
-def compressible(n, k, e):
+def compressible(n, k, e=0.1):
     u"""
-        [return]  k-sparse vector
-        n:        size of vector
-        k:        number of nonzero entries
-        e:        noise level
+    perform IHT 
+    [args]
+        n: size of vector
+        k: number of nonzero entries
+        e: noise factor (x e)
+    [return]
+        k-compressible vector
     """
-    z    = np.zeros(n)
-    N    = np.arange(n)
-    K    = np.random.choice( N, k, replace=None )
-    K_c  = [ i for i in N if i not in K]
-
-    for k in K:   # supports of nonzero entries
-        z[k] = np.random.randn() + 0.2
-    for i in K_c:
-        z[i] = e * np.random.randn()
-        
+    z = sparse(n, k) + e * np.random.randn(n)
     return z
 
 
@@ -42,7 +40,10 @@ def compressible(n, k, e):
 
 if __name__ == '__main__':
 
+
     s = 2
     print "%s-sparse vector:" % s
     print  sparse(10, s)
     print  compressible(10, s, 0.1)
+
+

@@ -15,6 +15,7 @@ def spark(A):
                 return k
 
 
+
 if __name__ == '__main__':
     
     A1 = np.array([ [1, 0, 1, 1],

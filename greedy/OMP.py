@@ -16,7 +16,6 @@ class OMP(Greedy):
         recovered vector (1d ndarray)
     """
 
-
     def __init__(self, A, y):
 
         Greedy.__init__(self, A, y)
@@ -25,7 +24,6 @@ class OMP(Greedy):
     def __iter__(self):
 
         return self
-   
   
     
     def iterate(self):    
@@ -40,7 +38,7 @@ class OMP(Greedy):
         # B3
         As  = self.A[:, sorted(self.S)]  # pick up columns which have the index in S
         xs  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
-        x   = np.zeros(n, dtype=np.complex)
+        x   = np.zeros(self.A.shape[1], dtype=np.complex)
         for j, s in enumerate(sorted(self.S)):
             x[s] = xs[j]
         return x 
@@ -51,8 +49,6 @@ class OMP(Greedy):
 if __name__ == '__main__':
 
  
-    import matplotlib
-    matplotlib.use("TkAgg")
     import matplotlib.pyplot as plt 
     from random_matrix import bernoulli, gaussian
     from sparse import sparse

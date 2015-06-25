@@ -1,6 +1,6 @@
 # coding: utf-8
 u"""
-   OMP (Orthogonal Matching Pursuit) 
+    Base class of Greedy algorithms
 """
 import numpy as np
 
@@ -17,6 +17,11 @@ class Greedy:
 
 
     def __init__(self, A, y):
+
+        # Constants about convergence
+        self.EPS         = 10**-5   # acceptable residual
+        self.ITER_MAX    = 1*10**1  # max of iterations 
+
         # Initialization 
         self.A  = A 
         self.y  = y
@@ -26,10 +31,6 @@ class Greedy:
         self.x  = np.zeros(A.shape[1], dtype=np.complex)
         # iterator var
         self.iterations = 0 
-        # Constants about convergence
-        self.EPS         = 10**-5   # acceptable residual
-        self.ITER_MAX    = 10**2    # max of iterations 
-
 
     def __iter__(self):
         return self

@@ -24,8 +24,6 @@ def coherence(A):
     return np.max(P)
 
 
-def l1_coherence(A, s):
-    pass 
 
 
 
