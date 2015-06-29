@@ -5,6 +5,8 @@ u"""
 import numpy as np
 
 
+
+
 class Greedy:
     u"""
     base class of Greedy algorithms
@@ -14,13 +16,14 @@ class Greedy:
     [return]
         recovered vector      (1d ndarray)
     """
-
-
+        
     def __init__(self, A, y):
 
         # Constants about convergence
-        self.EPS         = 10**-5   # acceptable residual
+        self.EPS         = 10**-5        # acceptable residual
         self.ITER_MAX    = 1*10**1  # max of iterations 
+        
+        self.name        = "Unknown"
 
         # Initialization 
         self.A  = A 
@@ -41,12 +44,13 @@ class Greedy:
         # check number of loops
         if self.iterations == self.ITER_MAX:
             print "Reach to MAX Iterations"
+            print self.get_result()
             raise StopIteration
         
         # check convergence by previous iteration
         if self.e < self.EPS:
             print "Converged"
-            print self.get_status()
+            print self.get_result()
             raise StopIteration
 
         # return signal estimated by n-iterations 
@@ -57,12 +61,25 @@ class Greedy:
         print self.get_status()
         return self.x
    
-   
+ 
+    def set_epsilon(self, e):
+        
+        self.EPS = e
+        
+  
     def get_status(self):
         
         status =  "" 
         status += "iterations:        %d\n"    % self.iterations
         status += "residual norm (e): %.2e\n"  % self.e
         return status
-
+    
+    def get_result(self):
+        
+        result  = "------- summary ----\n"
+        result += "[ %s ]\n"                    % self.name
+        result += "number of iterations: %d\n"  % self.iterations 
+        result += "specified error:   %.2e\n"   % self.EPS
+        result += "residual norm (e): %.2e\n"   % self.e
+        return result
 

@@ -4,19 +4,7 @@ u"""
 """
 import numpy as np
 from greedy_baseclass import Greedy
-
-
-
-
-def hardThresholding(x, k):
-    
-    n = len(x) 
-    desc_idxes  = np.argsort(np.abs(x))[::-1]   # sort indexes in descending order
-    S           = desc_idxes[:k] 
-    x_          = np.zeros(n)
-    for s in S:
-        x_[s] = x[s]
-    return x_ 
+from thresholding import hardThresholding
 
 
 
@@ -34,6 +22,7 @@ class IHT(Greedy):
     def __init__(self, A, y, k):
 
         Greedy.__init__(self, A, y)
+        self.name = "IHT"
         self.k = k
 
              
@@ -45,8 +34,8 @@ class IHT(Greedy):
     def iterate(self):    
 
         p = self.x + np.dot( np.conj(self.A.T),  self.y - np.dot(self.A, self.x) )
-        x = hardThresholding(p, self.k)
-        return x 
+        self.x = hardThresholding(p, self.k)
+        return self.x 
 
 
 
@@ -67,8 +56,8 @@ if __name__ == '__main__':
     x[10]   = np.pi
     y       = np.dot(A,x)
     
-    iht = IHT(A, y, s)
-    for z in iht:
+    for z in IHT(A, y, s):
+
         plt.scatter(np.arange(n), x) 
         plt.stem(z)
         plt.show()
