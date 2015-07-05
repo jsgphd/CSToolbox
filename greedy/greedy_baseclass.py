@@ -6,7 +6,6 @@ import numpy as np
 
 
 
-
 class Greedy:
     u"""
     base class of Greedy algorithms
@@ -20,20 +19,19 @@ class Greedy:
     def __init__(self, A, y):
 
         # Constants about convergence
-        self.EPS         = 10**-5        # acceptable residual
-        self.ITER_MAX    = 1*10**1  # max of iterations 
+        self.EPS            = 10**-5        # acceptable residual
+        self.ITER_MAX       = 1*10**1  # max of iterations 
         
-        self.name        = "Unknown"
+        self.name           = "Unknown"
+        self.iterations     = 0  # iterator var
 
         # Initialization 
         self.A  = A 
         self.y  = y
         self.S  = set([]) # support (indexes)
-        self.r  = y
+        self.z  = np.zeros(A.shape[1], dtype=np.complex)
+        self.r  = self.y - np.dot(self.A, self.z)
         self.e  = float("inf") 
-        self.x  = np.zeros(A.shape[1], dtype=np.complex)
-        # iterator var
-        self.iterations = 0 
 
     def __iter__(self):
         return self
@@ -55,18 +53,21 @@ class Greedy:
 
         # return signal estimated by n-iterations 
         self.iterations += 1 
-        self.x  = self.iterate()
-        self.r  = self.y - np.dot(self.A, self.x)
+        self.z  = self.iterate()
+        self.r  = self.y - np.dot(self.A, self.z)
         self.e  = np.abs( np.linalg.norm(self.r) / np.linalg.norm(self.y) )
         print self.get_status()
-        return self.x
+        return self.z
    
  
     def set_epsilon(self, e):
-        
         self.EPS = e
         
   
+    def set_maxiterations(self, num):
+        self.ITER_MAX = num
+
+
     def get_status(self):
         
         status =  "" 
@@ -82,4 +83,3 @@ class Greedy:
         result += "specified error:   %.2e\n"   % self.EPS
         result += "residual norm (e): %.2e\n"   % self.e
         return result
-

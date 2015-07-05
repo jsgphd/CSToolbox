@@ -33,9 +33,9 @@ class IHT(Greedy):
     
     def iterate(self):    
 
-        p = self.x + np.dot( np.conj(self.A.T),  self.y - np.dot(self.A, self.x) )
-        self.x = hardThresholding(p, self.k)
-        return self.x 
+        p  = self.z + np.dot( np.conj(self.A.T),  self.r )
+        z  = hardThresholding(p, self.k)
+        return z 
 
 
 

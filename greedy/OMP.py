@@ -28,20 +28,29 @@ class OMP(Greedy):
     
     def iterate(self):    
 
-        # B1
-        p = np.dot( np.conj(self.A.T), self.r ) 
-        j = np.argmax( np.abs(p) )
+        # project residual vector on measurement matrix,
+        # and find the index of the largest entry
+        p  = np.dot( np.conj(self.A.T), self.r ) 
+        j  = np.argmax( np.abs(p) )
 
-        # B2
+        # add the index to the supports set S
         self.S.add(j)
         
-        # B3
-        As  = self.A[:, sorted(self.S)]             # pick up columns which have the index in S
-        xs  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
-        self.x   = np.zeros(self.A.shape[1], dtype=np.complex)
+        # make a matrix which of columns have the index in S
+        As  = self.A[:, sorted(self.S)]
+
+        # to minimum solution of || As z - y ||2 = 0,
+        # solve least square
+        zs  = np.dot( np.linalg.pinv(As), self.y )
+        
+        # make approximated signal z,
+        # the entries of which are the solutions of
+        # the previous least square
+        z  = np.zeros(self.A.shape[1], dtype=np.complex)
         for j, s in enumerate(sorted(self.S)):
-            self.x[s] = xs[j]
-        return self.x 
+            z[s] = zs[j]
+
+        return z 
     
     
 
