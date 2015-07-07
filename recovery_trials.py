@@ -19,7 +19,7 @@ import sys
 
 # make raw signal & measurement matrix 
 m  = 50
-n  = 5000
+n  = 200
 s  = 2
 A       =  gaussian(m, n)
 x       = np.zeros(n)

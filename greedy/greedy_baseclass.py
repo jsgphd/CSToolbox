@@ -27,9 +27,10 @@ class Greedy:
 
         # Initialization 
         self.A  = A 
+        self.n  = A.shape[1]
         self.y  = y
         self.S  = set([]) # support (indexes)
-        self.z  = np.zeros(A.shape[1], dtype=np.complex)
+        self.z  = np.zeros(self.n, dtype=np.complex)
         self.r  = self.y - np.dot(self.A, self.z)
         self.e  = float("inf") 
 
