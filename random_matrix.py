@@ -5,20 +5,7 @@ u"""
 """
 
 
-
-def normalize(v):
-    norm = np.linalg.norm(v)
-    if norm==0:
-        return v 
-    else:
-        return v/np.linalg.norm(v)
-    
-
-def column_normalize(A): 
-    n       = A.shape[1]
-    cols    = np.hsplit(A, n)
-    return  np.hstack([ normalize(col) for col in cols ])
-    
+   
 
  
 def bernoulli(m, n):
@@ -29,7 +16,6 @@ def bernoulli(m, n):
     """
     A = np.random.choice( (0,1), (m, n) )
     return A 
-
 
 
 def gaussian(m, n):
@@ -43,6 +29,21 @@ def gaussian(m, n):
     return A
 
 
+
+
+def normalize(v):
+    norm = np.linalg.norm(v)
+    if norm==0:
+        return v 
+    else:
+        return v/norm
+    
+
+def column_normalize(A): 
+    n       = A.shape[1]
+    cols    = np.hsplit(A, n)
+    return  np.hstack([ normalize(col) for col in cols ])
+ 
 
 if __name__ == '__main__':
     

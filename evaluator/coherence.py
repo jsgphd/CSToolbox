@@ -20,7 +20,6 @@ def coherence(A):
     for i, j in itertools.combinations(N, 2):
         p = np.abs( np.dot(A[:,i], A[:,j]) )
         P.append(p)
-    print P
     return np.max(P)
 
 
