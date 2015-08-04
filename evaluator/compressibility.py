@@ -11,7 +11,7 @@ def compressibility(k, x, p):
     n     = x.shape[0]
     for k in K:
         x[k] = 0.0
-    return np.linalg.norm(x,2)
+    return np.linalg.norm(x,p)
 
 
 
