@@ -1,6 +1,6 @@
 # coding: utf-8
 u"""
-    Utility functions about coherence
+    Util funcs of coherence
 """
 import numpy as np
 import itertools

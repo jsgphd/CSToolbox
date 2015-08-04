@@ -30,7 +30,7 @@ class OMP(Greedy):
 
         # project residual vector on measurement matrix,
         # and find the index of the largest entry
-        g  = np.dot( np.conj(self.A.T), self.r ) 
+        g = np.dot( np.conj(self.A.T), self.r ) 
         j = np.argmax([ np.abs(g[i]) / np.linalg.norm(self.A[:,i]) for i in range(self.n) ])
 
         # add the index to the supports set S

@@ -14,8 +14,8 @@ def bernoulli(m, n):
     which have bernoulli distribution elements
     columns are l2 normalized
     """
-    A = np.random.choice( (0,1), (m, n) )
-    return A 
+    return np.random.choice( (0,1), (m, n) )
+     
 
 
 def gaussian(m, n):
@@ -27,7 +27,6 @@ def gaussian(m, n):
     A = np.random.randn(m, n)
     A = column_normalize(A)
     return A
-
 
 
 
@@ -44,6 +43,8 @@ def column_normalize(A):
     cols    = np.hsplit(A, n)
     return  np.hstack([ normalize(col) for col in cols ])
  
+
+
 
 if __name__ == '__main__':
     
