@@ -12,7 +12,6 @@ def sparse(n, k):
     [return]
         k-sparse vector
     """
-
     z = np.zeros(n)
     for i in np.random.choice( np.arange(n), k, replace=None ):   # supports of nonzero entries
         z[i] = np.random.randn()

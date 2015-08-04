@@ -6,8 +6,8 @@ u"""
 import numpy as np
 import matplotlib.pyplot as plt 
 
-from random_matrix import bernoulli, gaussian
-from sparse import sparse
+from generator.random_matrix import bernoulli, gaussian
+from generator.sparse import sparse
 
 from greedy.OMP import OMP 
 from greedy.IHT import IHT

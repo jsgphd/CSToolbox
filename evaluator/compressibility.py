@@ -17,7 +17,7 @@ def compressibility(k, x, p):
 
 if __name__ == '__main__':
     
-    from CSToolbox.sparse import compressible
+    from CSToolbox.generator.sparse import compressible
 
     N, k  = 10, 2
     n     = np.arange(N)

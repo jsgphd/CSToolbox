@@ -28,7 +28,7 @@ def coherence(A):
 
 if __name__ == '__main__':
     
-    from random_matrix import gaussian, bernoulli
+    from generator.random_matrix import gaussian, bernoulli
     m = 3
     n = 5
     A = np.arange(m*n).reshape(m,n)

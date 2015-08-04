@@ -43,8 +43,8 @@ class IHT(Greedy):
 if __name__ == '__main__':
 
     import matplotlib.pyplot as plt 
-    from random_matrix import bernoulli, gaussian
-    from sparse import sparse
+    from generator.random_matrix import bernoulli, gaussian
+    from CSToolbox.generator import sparse.sparse
    
     m  = 20
     n  = 30
