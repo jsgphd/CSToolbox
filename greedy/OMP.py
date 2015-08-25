@@ -19,7 +19,8 @@ class OMP(Greedy):
     def __init__(self, A, y):
         
         Greedy.__init__(self, A, y)
-        self.name = "OMP"
+        self.name   = "OMP"
+        self.S      = set([]) # support set (indexes)
 
     def __iter__(self):
 
@@ -60,7 +61,7 @@ if __name__ == '__main__':
  
     import matplotlib.pyplot as plt 
     from generator.random_matrix import bernoulli, gaussian
-    from CSToolbox.generator import sparse.sparse
+    from CSToolbox.generator import sparse
    
     m  = 10
     n  = 20
@@ -72,11 +73,13 @@ if __name__ == '__main__':
     x[10]   = np.pi
     y       = np.dot(A,x)
    
-    
-    for z in OMP(A, y):
-        plt.scatter(np.arange(n), x) 
-        plt.stem(z)
-        plt.show()
+    iter = OMP(A, y) 
+    for z in iter:
+        plt.clf()
+        plt.scatter(np.arange(n), x, s=60, marker='x', c='r') 
+        plt.stem(z.real)
+        #plt.show()
+        #print iter.get_status()
         
     plt.show()
         

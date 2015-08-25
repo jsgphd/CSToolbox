@@ -23,7 +23,8 @@ class CoSaMP(Greedy):
 
         Greedy.__init__(self, A, y)
         self.name = "CoSaMP"
-        self.k = k
+        self.S  = set([]) # support set (indexes)
+        self.k  = k
 
 
     def __iter__(self):
@@ -38,7 +39,7 @@ class CoSaMP(Greedy):
         s        = indexThresholding(z, 2*self.k)
         self.S  |= set(s)
         
-        As  = self.A[:, sorted(self.S)]  # pick up columns which have the index in S
+        As  = self.A[:, sorted(self.S)]             # pick up columns which have the index in S
         us  = np.dot( np.linalg.pinv(As), self.y )  # solve least square
         u   = np.zeros(self.A.shape[1], dtype=np.complex)
         for j, s in enumerate(sorted(self.S)):
@@ -55,7 +56,7 @@ if __name__ == '__main__':
  
     import matplotlib.pyplot as plt
     from generator.random_matrix import bernoulli, gaussian
-    from CSToolbox.generator import sparse.sparse
+    from CSToolbox.generator import sparse
    
     m  = 10
     n  = 20
@@ -69,8 +70,8 @@ if __name__ == '__main__':
     
     for z in CoSaMP(A, y, s):
         plt.scatter(np.arange(n), x) 
-        plt.stem(z)
-        plt.show()
+        plt.stem(z.real)
+        #plt.show()
         
     plt.show()
         

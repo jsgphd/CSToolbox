@@ -18,6 +18,15 @@ class Greedy:
         
     def __init__(self, A, y):
 
+        self.A  = A 
+        self.n  = A.shape[1]
+        self.y  = y
+        self.e  = float("inf") 
+
+        # Initialization 
+        self.z  = np.zeros(self.n, dtype=np.complex)
+        self.r  = self.y
+
         # Constants about convergence
         self.EPS            = 10**-5        # acceptable residual
         self.ITER_MAX       = 1*10**1  # max of iterations 
@@ -25,14 +34,7 @@ class Greedy:
         self.name           = "Unknown"
         self.iterations     = 0  # iterator var
 
-        # Initialization 
-        self.A  = A 
-        self.n  = A.shape[1]
-        self.y  = y
-        self.S  = set([]) # support (indexes)
-        self.z  = np.zeros(self.n, dtype=np.complex)
-        self.r  = self.y - np.dot(self.A, self.z)
-        self.e  = float("inf") 
+
 
     def __iter__(self):
         return self
@@ -52,12 +54,13 @@ class Greedy:
             print self.get_result()
             raise StopIteration
 
-        # return signal estimated by n-iterations 
+        # iterate 
         self.iterations += 1 
         self.z  = self.iterate()
+
+        # return signal estimated by n-iterations 
         self.r  = self.y - np.dot(self.A, self.z)
-        self.e  = np.abs( np.linalg.norm(self.r) / np.linalg.norm(self.y) )
-        print self.get_status()
+        self.e  = np.linalg.norm(self.r) / np.linalg.norm(self.y)
         return self.z
    
  
@@ -78,7 +81,7 @@ class Greedy:
     
     def get_result(self):
         
-        result  = "------- summary ----\n"
+        result  = "------- summary ------\n"
         result += "[ %s ]\n"                    % self.name
         result += "number of iterations: %d\n"  % self.iterations 
         result += "specified error:   %.2e\n"   % self.EPS
