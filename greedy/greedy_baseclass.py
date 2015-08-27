@@ -63,7 +63,10 @@ class Greedy:
         self.e  = np.linalg.norm(self.r) / np.linalg.norm(self.y)
         return self.z
    
- 
+    def get_last(self):
+        
+       return [i for i in self][-1]  
+
     def set_epsilon(self, e):
         self.EPS = e
         

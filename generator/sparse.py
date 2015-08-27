@@ -5,7 +5,9 @@ import numpy as np
 
 def sparse(n, k):
     u"""
-    perform IHT 
+    return k sparse vector, 
+    the value of non-zero entries are 
+    normal distributed N(0,1).
     [args]
         n: size of vector
         k: number of nonzero entries
