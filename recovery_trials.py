@@ -6,12 +6,12 @@ u"""
 import numpy as np
 import matplotlib.pyplot as plt 
 
-from generator.random_matrix import bernoulli, gaussian
+from generator.sensing_matrix import bernoulli, gaussian
 from generator.sparse import sparse
 
-from greedy.OMP import OMP 
-from greedy.IHT import IHT
-from greedy.CoSaMP import CoSaMP
+from recovery.OMP import OMP 
+from recovery.IHT import IHT
+from recovery.CoSaMP import CoSaMP
 
 import sys
 
